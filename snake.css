@@ -1,5 +1,7 @@
 html {
     box-sizing: border-box;
+    background-color: #133;
+    color: #99aaee;
 }
 
 #layout {
