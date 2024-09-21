@@ -1,0 +1,16 @@
+html {
+    box-sizing: border-box;
+}
+
+#layout {
+    width:100%;
+    display: flex;
+    justify-content: center;
+}
+
+#snake-board {
+    position: relative;
+    background: #ee9;
+    margin: 50px auto;
+    width: 800px;
+}
