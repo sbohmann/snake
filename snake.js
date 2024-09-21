@@ -14,8 +14,7 @@ function setup() {
     const boardWidth = 40
     const boardHeight = 40
 
-    let x
-    let y
+    let currentPosition
     let currentDirection
     let directionQueue
     let lastDirection
@@ -27,8 +26,7 @@ function setup() {
     setInitialState()
 
     function setInitialState() {
-        x = 0
-        y = 0
+        currentPosition = {x: 0, y: 0}
         currentDirection = None
         directionQueue = []
         state = BoardState()
@@ -67,8 +65,8 @@ function setup() {
                 break
             }
         }
-        let [newX, newY] = currentDirection.move(x, y);
-        if (newX === x && newY === y) {
+        let [newX, newY] = currentDirection.move(currentPosition.x, currentPosition.y);
+        if (newX === currentPosition.x && newY === currentPosition.y) {
             return
         }
         if (!insideBoard(newX, newY) || state.get(newX, newY)) {
@@ -76,16 +74,16 @@ function setup() {
             gc.fillStyle = '#ff003366'
             gc.fillRect(0, 0, snakeBoard.width, snakeBoard.height)
         } else {
-            [x, y] = [newX, newY]
+            [currentPosition.x, currentPosition.y] = [newX, newY]
             processCurrentPosition();
         }
     }
 
     function processCurrentPosition() {
-        state.set(x, y, true)
-        snakeFields.push({x, y})
+        state.set(currentPosition.x, currentPosition.y, true)
+        snakeFields.push({x: currentPosition.x, y: currentPosition.y})
         if (snakeFields.length > snakeLength) {
-            lastField = snakeFields.shift()
+            let lastField = snakeFields.shift()
             state.set(lastField.x, lastField.y, false)
             remove(lastField.x, lastField.y)
         }
@@ -94,7 +92,7 @@ function setup() {
 
     function draw() {
         gc.fillStyle = 'black'
-        gc.fillRect(x * gridSize, y * gridSize, gridSize, gridSize)
+        gc.fillRect(currentPosition.x * gridSize, currentPosition.y * gridSize, gridSize, gridSize)
     }
 
     function remove(x, y) {
