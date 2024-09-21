@@ -8,7 +8,7 @@ const Right = Object.freeze({keyCode: 'ArrowRight', name: 'Right', move: moveFun
 const Directions = Object.freeze([None, Up, Down, Left, Right])
 
 function setup() {
-    const gridSize = 20;
+    const gridSize = 20
     const snakeBoard = document.getElementById('snake-board')
     const gc = snakeBoard.getContext('2d')
     const boardWidth = 40
@@ -31,7 +31,7 @@ function setup() {
         directionQueue = []
         state = BoardState()
         snakeFields = []
-        snakeLength = 25
+        snakeLength = 20
         failed = false
     }
 
@@ -65,18 +65,28 @@ function setup() {
                 break
             }
         }
-        let [newX, newY] = currentDirection.move(currentPosition.x, currentPosition.y);
+        let [newX, newY] = currentDirection.move(currentPosition.x, currentPosition.y)
         if (newX === currentPosition.x && newY === currentPosition.y) {
             return
         }
-        if (!insideBoard(newX, newY) || state.get(newX, newY)) {
+        if (!insideBoard(newX, newY) || hitSnake(newX, newY)) {
             failed = true
             gc.fillStyle = '#ff003366'
             gc.fillRect(0, 0, snakeBoard.width, snakeBoard.height)
         } else {
             [currentPosition.x, currentPosition.y] = [newX, newY]
-            processCurrentPosition();
+            processCurrentPosition()
         }
+    }
+
+    function hitSnake(newX, newY) {
+        let hit = state.get(newX, newY)
+        return hit && !atLastFieldOfSnake(newX, newY)
+    }
+
+    function atLastFieldOfSnake(x, y) {
+        let lastField = snakeFields[0]
+        return x === lastField.x && y === lastField.y
     }
 
     function processCurrentPosition() {
@@ -87,7 +97,7 @@ function setup() {
             state.set(lastField.x, lastField.y, false)
             remove(lastField.x, lastField.y)
         }
-        draw();
+        draw()
     }
 
     function draw() {
