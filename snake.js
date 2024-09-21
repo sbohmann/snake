@@ -11,12 +11,16 @@ function setup() {
     const gridSize = 20;
     const snakeBoard = document.getElementById('snake-board')
     const gc = snakeBoard.getContext('2d')
+    const boardWidth = 40
+    const boardHeight = 40
 
     let x
     let y
     let currentDirection
     let directionQueue
     let lastDirection
+    let failed
+    let snakeFields
 
     setInitialState()
 
@@ -25,6 +29,8 @@ function setup() {
         y = 0
         currentDirection = None
         directionQueue = []
+        snakeFields = SnakeFields()
+        failed = false
     }
 
     window.onkeydown = event => {
@@ -47,6 +53,9 @@ function setup() {
     const interval = setInterval(move, 100)
 
     function move() {
+        if (failed) {
+            return
+        }
         while (directionQueue.length > 0) {
             let newDirection = directionQueue.shift()
             if (directionApplicable(newDirection)) {
@@ -54,8 +63,19 @@ function setup() {
                 break
             }
         }
-        [x, y] = currentDirection.move(x, y)
-        draw();
+        let [newX, newY] = currentDirection.move(x, y);
+        if (newX === x && newY === y) {
+            return
+        }
+        if (!insideBoard(newX, newY) || snakeFields.get(newX, newY)) {
+            failed = true
+            gc.fillStyle = '#ff003366'
+            gc.fillRect(0, 0, snakeBoard.width, snakeBoard.height)
+        } else {
+            [x, y] = [newX, newY]
+            snakeFields.set(x, y)
+            draw();
+        }
     }
 
     function draw() {
@@ -79,6 +99,30 @@ function setup() {
             case Right:
                 return direction === Up || direction === Down
         }
+    }
+
+    function SnakeFields() {
+        const state = new Array(boardWidth * boardHeight)
+        return {
+            set(x, y) {
+                if (insideBoard(x, y)) {
+                    state[address(x, y)] = true
+                }
+            },
+            get(x, y) {
+                if (insideBoard(x, y)) {
+                    return state[address(x, y)] === true
+                }
+            }
+        }
+        function address(x, y) {
+            return y * boardWidth + x
+        }
+    }
+
+    function insideBoard(x, y) {
+        return 0 <= x && x < boardWidth
+            && 0 <= y && y < boardHeight
     }
 }
 
