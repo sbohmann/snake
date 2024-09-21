@@ -22,6 +22,7 @@ function setup() {
     let snakeFields
     let snakeLength
     let failed
+    let applePosition
 
     setInitialState()
 
@@ -33,13 +34,15 @@ function setup() {
         snakeFields = []
         snakeLength = 20
         failed = false
+        applePosition = state.calculateApplePosition()
+        drawApple()
     }
 
     window.onkeydown = event => {
         if (event.code === 'Escape') {
-            setInitialState()
             gc.reset()
             gc.clearRect(0, 0, snakeBoard.width, snakeBoard.height)
+            setInitialState()
             processCurrentPosition()
             return
         }
@@ -97,7 +100,18 @@ function setup() {
             state.set(lastField.x, lastField.y, false)
             remove(lastField.x, lastField.y)
         }
+        if (applePosition !== undefined
+            && currentPosition.x === applePosition.x
+            && currentPosition.y === applePosition.y) {
+            processApple()
+        }
         draw()
+    }
+
+    function processApple() {
+        ++snakeLength
+        applePosition = state.calculateApplePosition()
+        drawApple()
     }
 
     function draw() {
@@ -107,6 +121,17 @@ function setup() {
 
     function remove(x, y) {
         gc.clearRect(x * gridSize, y * gridSize, gridSize, gridSize)
+    }
+
+    function drawApple() {
+        drawAppleAtPosition(applePosition.x, applePosition.y)
+    }
+
+    function drawAppleAtPosition(x, y) {
+        if (applePosition !== undefined) {
+            gc.fillStyle = 'red'
+            gc.fillRect(x * gridSize + 1, y * gridSize + 1, gridSize - 2, gridSize - 2)
+        }
     }
 
     function directionApplicable(direction) {
@@ -140,10 +165,33 @@ function setup() {
                 if (insideBoard(x, y)) {
                     return data[address(x, y)] === true
                 }
+            },
+            calculateApplePosition() {
+                let numberOfFreeFields = 0
+                for (let index = 0; index < data.length; ++index) {
+                    if (!data[index]) {
+                        ++numberOfFreeFields
+                    }
+                }
+                let appleFreeFieldIndex = Math.floor(Math.random() * numberOfFreeFields)
+                for (let index = 0, freeFieldIndex = -1; index < data.length; ++index) {
+                    if (!data[index]) {
+                        ++freeFieldIndex
+                        if (freeFieldIndex === appleFreeFieldIndex) {
+                            return positionForAddress(index)
+                        }
+                    }
+                }
             }
         }
         function address(x, y) {
             return y * boardWidth + x
+        }
+        function positionForAddress(index) {
+            return {
+                x: index % boardWidth,
+                y: Math.floor(index / boardWidth)
+            }
         }
     }
 
