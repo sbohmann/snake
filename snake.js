@@ -19,8 +19,10 @@ function setup() {
     let currentDirection
     let directionQueue
     let lastDirection
-    let failed
+    let state
     let snakeFields
+    let snakeLength
+    let failed
 
     setInitialState()
 
@@ -29,7 +31,9 @@ function setup() {
         y = 0
         currentDirection = None
         directionQueue = []
-        snakeFields = SnakeFields()
+        state = BoardState()
+        snakeFields = []
+        snakeLength = 25
         failed = false
     }
 
@@ -38,7 +42,7 @@ function setup() {
             setInitialState()
             gc.reset()
             gc.clearRect(0, 0, snakeBoard.width, snakeBoard.height)
-            draw()
+            processCurrentPosition()
             return
         }
         for (let direction of Directions) {
@@ -48,7 +52,7 @@ function setup() {
         }
     }
 
-    draw()
+    processCurrentPosition()
 
     const interval = setInterval(move, 100)
 
@@ -67,20 +71,34 @@ function setup() {
         if (newX === x && newY === y) {
             return
         }
-        if (!insideBoard(newX, newY) || snakeFields.get(newX, newY)) {
+        if (!insideBoard(newX, newY) || state.get(newX, newY)) {
             failed = true
             gc.fillStyle = '#ff003366'
             gc.fillRect(0, 0, snakeBoard.width, snakeBoard.height)
         } else {
             [x, y] = [newX, newY]
-            snakeFields.set(x, y)
-            draw();
+            processCurrentPosition();
         }
+    }
+
+    function processCurrentPosition() {
+        state.set(x, y, true)
+        snakeFields.push({x, y})
+        if (snakeFields.length > snakeLength) {
+            lastField = snakeFields.shift()
+            state.set(lastField.x, lastField.y, false)
+            remove(lastField.x, lastField.y)
+        }
+        draw();
     }
 
     function draw() {
         gc.fillStyle = 'black'
         gc.fillRect(x * gridSize, y * gridSize, gridSize, gridSize)
+    }
+
+    function remove(x, y) {
+        gc.clearRect(x * gridSize, y * gridSize, gridSize, gridSize)
     }
 
     function directionApplicable(direction) {
@@ -101,17 +119,18 @@ function setup() {
         }
     }
 
-    function SnakeFields() {
-        const state = new Array(boardWidth * boardHeight)
+    function BoardState() {
+        const data = new Array(boardWidth * boardHeight)
+        data.fill(false)
         return {
-            set(x, y) {
+            set(x, y, value) {
                 if (insideBoard(x, y)) {
-                    state[address(x, y)] = true
+                    data[address(x, y)] = value
                 }
             },
             get(x, y) {
                 if (insideBoard(x, y)) {
-                    return state[address(x, y)] === true
+                    return data[address(x, y)] === true
                 }
             }
         }
