@@ -10,6 +10,7 @@ const Directions = Object.freeze([None, Up, Down, Left, Right])
 function setup() {
     const gridSize = 20
     const snakeBoard = document.getElementById('snake-board')
+    const scoreLabel = document.getElementById('score-label')
     const gc = snakeBoard.getContext('2d')
     const boardWidth = 40
     const boardHeight = 40
@@ -22,6 +23,9 @@ function setup() {
     let snakeFields
     let snakeLength
     let failed
+    let delay
+    let interval
+    let score
     let applePosition
 
     setInitialState()
@@ -34,6 +38,10 @@ function setup() {
         snakeFields = []
         snakeLength = 20
         failed = false
+        delay = 100
+        restartTimer()
+        score = 0
+        displayScore()
         applePosition = state.calculateApplePosition()
         drawApple()
     }
@@ -55,7 +63,12 @@ function setup() {
 
     processCurrentPosition()
 
-    const interval = setInterval(move, 100)
+    function restartTimer() {
+        if (interval !== undefined) {
+            clearInterval(interval)
+        }
+        interval = setInterval(move, delay)
+    }
 
     function move() {
         if (failed) {
@@ -112,6 +125,13 @@ function setup() {
         ++snakeLength
         applePosition = state.calculateApplePosition()
         drawApple()
+        ++score
+        displayScore()
+        clearInterval(interval)
+        if (delay > 20) {
+            --delay
+            restartTimer()
+        }
     }
 
     function draw() {
@@ -125,6 +145,10 @@ function setup() {
 
     function drawApple() {
         drawAppleAtPosition(applePosition.x, applePosition.y)
+    }
+
+    function displayScore() {
+        scoreLabel.textContent = score.toString()
     }
 
     function drawAppleAtPosition(x, y) {
