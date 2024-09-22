@@ -110,8 +110,10 @@ function setup() {
         snakeFields.push({x: currentPosition.x, y: currentPosition.y})
         if (snakeFields.length > snakeLength) {
             let lastField = snakeFields.shift()
-            state.set(lastField.x, lastField.y, false)
-            remove(lastField.x, lastField.y)
+            if (lastField.x !== currentPosition.x || lastField.y !== currentPosition.y) {
+                state.set(lastField.x, lastField.y, false)
+                remove(lastField.x, lastField.y)
+            }
         }
         if (applePosition !== undefined
             && currentPosition.x === applePosition.x
@@ -127,7 +129,6 @@ function setup() {
         drawApple()
         ++score
         displayScore()
-        clearInterval(interval)
         if (delay > 20) {
             --delay
             restartTimer()
