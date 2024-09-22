@@ -11,6 +11,8 @@ function setup() {
     const gridSize = 20
     const snakeBoard = document.getElementById('snake-board')
     const scoreLabel = document.getElementById('score-label')
+    const audioPlayButton = document.getElementById('audio-play')
+    const music = document.getElementById('music')
     const gc = snakeBoard.getContext('2d')
     const boardWidth = 40
     const boardHeight = 40
@@ -60,6 +62,8 @@ function setup() {
             }
         }
     }
+
+    //audioPlayButton.onclick = () => music.play()
 
     processCurrentPosition()
 
