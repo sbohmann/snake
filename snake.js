@@ -8,14 +8,14 @@ const Right = Object.freeze({keyCode: 'ArrowRight', name: 'Right', move: moveFun
 const Directions = Object.freeze([None, Up, Down, Left, Right])
 
 function setup() {
-    const gridSize = 20
+    const gridSize = determineGridSize()
     const snakeBoard = document.getElementById('snake-board')
     const scoreLabel = document.getElementById('score-label')
     const audioPlayButton = document.getElementById('audio-play')
     const music = document.getElementById('music')
     const gc = snakeBoard.getContext('2d')
-    const boardWidth = 40
-    const boardHeight = 40
+    const boardWidth = 800 / gridSize
+    const boardHeight = 800 / gridSize
 
     let currentPosition
     let currentDirection
@@ -40,7 +40,7 @@ function setup() {
         snakeFields = []
         snakeLength = 20
         failed = false
-        delay = 100
+        delay = gridSize * 5
         restartTimer()
         score = 0
         displayScore()
@@ -241,4 +241,17 @@ function opposite(direction) {
 
 function moveFunction(dx, dy) {
     return (x, y) => [x + dx, y + dy]
+}
+
+function determineGridSize() {
+    let result = 20
+    let queryString = window.location.search
+    if (queryString !== undefined) {
+
+        let candidate = Number.parseInt(queryString.substring(1))
+        if (!Number.isNaN(candidate)) {
+            result = candidate
+        }
+    }
+    return result
 }
