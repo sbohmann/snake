@@ -1,0 +1,19 @@
+Due to the nagging of prior users, I have relented and made the decision to provide this informational text.
+
+At the beginng, the snake is the black dot in the top left corner.
+
+The left arrow key makes the snake move left.
+The up arrow key makes the snake move up.
+The right arrow key makes the snake move right.
+The down arrow key makes the snake move down.
+The left arrow key makes the snake move left.
+The space arrow key stops the snake.
+The escape arrow key restarts the game.
+
+The red dot is the apple. Eat the apple to gain scores.
+
+Do not leave the confines of the rectangle.
+
+When the rectangle turns red, you have lost and need to restart.
+
+The escape arrow key restarts the game.

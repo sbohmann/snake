@@ -9,6 +9,29 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    font-family: sans-serif;
+}
+
+#title {
+    margin: auto;
+    font-size: 50px;
+}
+
+#start_modes {
+    margin: 50px auto;
+    font-size: 32px;
+}
+
+#start_modes * {
+    color: #ff7777;
+    font-weight: bold;
+}
+
+#help {
+    margin: auto;
+    font-size: 25px;
+    width: 800px;
+    color: #ffddaa;
 }
 
 #snake-board {
