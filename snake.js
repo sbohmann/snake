@@ -54,8 +54,7 @@ function setup() {
             gc.clearRect(0, 0, snakeBoard.width, snakeBoard.height)
             setInitialState()
             processCurrentPosition()
-            event.stopPropagation()
-            return
+            return false
         }
         for (let direction of Directions) {
             if (event.code === direction.keyCode) {
