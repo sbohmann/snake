@@ -54,6 +54,7 @@ function setup() {
             gc.clearRect(0, 0, snakeBoard.width, snakeBoard.height)
             setInitialState()
             processCurrentPosition()
+            event.stopPropagation()
             return
         }
         for (let direction of Directions) {
@@ -247,7 +248,6 @@ function determineGridSize() {
     let result = 20
     let queryString = window.location.search
     if (queryString !== undefined) {
-
         let candidate = Number.parseInt(queryString.substring(1))
         if (!Number.isNaN(candidate)) {
             result = candidate

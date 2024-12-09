@@ -29,9 +29,11 @@ html {
 
 #help {
     margin: auto;
+    padding: 15px;
     font-size: 25px;
     width: 800px;
     color: #ffddaa;
+    background-color: #fff2;
 }
 
 #snake-board {
