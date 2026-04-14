@@ -1,18 +1,18 @@
 window.onload = setup
 
-const None = Object.freeze({keyCode: 'Space', name: 'None', move: moveFunction(0, 0)})
-const Up = Object.freeze({keyCode: 'ArrowUp', name: 'Up', move: moveFunction(0, -1)})
-const Down = Object.freeze({keyCode: 'ArrowDown', name: 'Down', move: moveFunction(0, 1)})
-const Left = Object.freeze({keyCode: 'ArrowLeft', name: 'Left', move: moveFunction(-1, 0)})
-const Right = Object.freeze({keyCode: 'ArrowRight', name: 'Right', move: moveFunction(1, 0)})
+const None = Object.freeze({keyCodes: ['Space'], name: 'None', move: moveFunction(0, 0)})
+const Up = Object.freeze({keyCodes: ['ArrowUp', 'KeyK', 'KeyD'], name: 'Up', move: moveFunction(0, -1)})
+const Down = Object.freeze({keyCodes: ['ArrowDown', 'KeyJ', 'KeyS'], name: 'Down', move: moveFunction(0, 1)})
+const Left = Object.freeze({keyCodes: ['ArrowLeft', 'KeyH', 'KeyA'], name: 'Left', move: moveFunction(-1, 0)})
+const Right = Object.freeze({keyCodes: ['ArrowRight', 'KeyL', 'KeyF'], name: 'Right', move: moveFunction(1, 0)})
 const Directions = Object.freeze([None, Up, Down, Left, Right])
 
 function setup() {
     const gridSize = determineGridSize()
     const snakeBoard = document.getElementById('snake-board')
     const scoreLabel = document.getElementById('score-label')
-    const audioPlayButton = document.getElementById('audio-play')
-    const music = document.getElementById('music')
+    // const audioPlayButton = document.getElementById('audio-play')
+    // const music = document.getElementById('music')
     const gc = snakeBoard.getContext('2d')
     const boardWidth = 800 / gridSize
     const boardHeight = 800 / gridSize
@@ -57,13 +57,13 @@ function setup() {
             return false
         }
         for (let direction of Directions) {
-            if (event.code === direction.keyCode) {
+            if (direction.keyCodes.includes(event.code)) {
                 directionQueue.push(direction)
             }
         }
     }
 
-    //audioPlayButton.onclick = () => music.play()
+    // audioPlayButton.onclick = () => music.play()
 
     processCurrentPosition()
 
