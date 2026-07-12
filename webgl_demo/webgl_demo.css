@@ -1,0 +1,48 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    overflow: hidden;
+}
+
+#webgl-layout {
+    box-sizing: border-box;
+    min-height: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+    font-family: sans-serif;
+}
+
+#webgl-intro {
+    flex: 0 0 auto;
+    color: #ffddaa;
+}
+
+#webgl-intro h1 {
+    margin: 0 0 8px;
+    font-size: clamp(28px, 5vw, 50px);
+    line-height: 1.05;
+}
+
+#webgl-intro p {
+    max-width: 900px;
+    margin: 0;
+    font-size: clamp(16px, 2.5vw, 22px);
+    line-height: 1.35;
+}
+
+#webgl-canvas {
+    display: block;
+    flex: 1 1 auto;
+    min-height: 180px;
+    width: 100%;
+    background: #071a1b;
+    border: 1px solid #99aaee66;
+    box-shadow: 0 0 0 1px #0008, 0 18px 60px #0008;
+}
